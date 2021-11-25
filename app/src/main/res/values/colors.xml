@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#08A5AF</color>
+    <color name="colorPrimaryVariant">#007680</color>
+
+    <color name="colorSecondary">#5bd7e1</color>
+    <color name="colorSecondaryVariant">#08a5af</color>
+
+    <color name="dark_gray">#333333</color>
+    <color name="background_gray">#838383</color>
+    <color name="toolbar_accent">#E1E1E1</color>
+
+    <color name="gray">#CCCCCC</color>
+    <color name="note_gray">#434343</color>
+    <color name="white">#FFFFFF</color>
+    <color name="red">#9F4040</color>
+    <color name="blue">#37837C</color>
+    <color name="green">#418133</color>
+    <color name="yellow">#978E40</color>
+    <color name="orange">#9A7C47</color>
+    <color name="purple">#6048A6</color>
+    <color name="pink">#6C2769</color>
+    <color name="brown">#712D26</color>
+
+</resources>

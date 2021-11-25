@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <group android:id="@+id/main_group"  android:checkableBehavior="single">
+        <item
+            android:id="@+id/mainFragment"
+            android:checked="true"
+            android:icon="@drawable/sticky_note"
+            android:title="@string/notes"
+            />
+        <item
+            android:id="@+id/favoriteFragment"
+            android:icon="@drawable/star_fill"
+            android:title="@string/favorite" />
+
+        <item
+            android:id="@+id/trashFragment"
+            android:icon="@drawable/delete"
+            android:title="@string/trash"
+            />
+    </group>
+
+    <group android:id="@+id/second_group">
+        <item
+            android:id="@+id/aboutFragment"
+            android:icon="@drawable/about"
+            android:title="@string/about" />
+    </group>
+</menu>

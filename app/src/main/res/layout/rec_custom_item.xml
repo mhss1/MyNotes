@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:cardCornerRadius="18dp"
+    app:cardElevation="10dp"
+    android:layout_margin="8dp"
+    tools:cardBackgroundColor="@color/dark_gray"
+    android:id="@+id/holder_card"
+    android:layoutAnimation="@anim/rec_single_item_layout_animation"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        >
+
+        <View
+            android:id="@+id/cardView"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_gravity="end|top"
+            android:layout_margin="16dp"
+            android:background="@drawable/circle_shape"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/titleTv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:paddingStart="12dp"
+            android:paddingTop="12dp"
+            android:paddingEnd="12dp"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold|italic"
+            android:maxLines="1"
+            android:ellipsize="end"
+            app:layout_constraintEnd_toStartOf="@+id/cardView"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Test Note Title " />
+
+        <TextView
+            android:id="@+id/noteTv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:paddingTop="12dp"
+            android:textColor="@color/toolbar_accent"
+            android:textSize="16sp"
+            android:maxLines="14"
+            android:ellipsize="end"
+            app:layout_constraintBottom_toTopOf="@+id/dateTv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/titleTv"
+            tools:text="Test Note next..." />
+
+        <TextView
+            android:id="@+id/dateTv"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:gravity="bottom|end"
+            android:padding="8dp"
+            android:textColor="@color/gray"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="May 12,2020" />
+
+        <ImageView
+            android:id="@+id/star_ic_rec_item"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="8dp"
+            android:src="@drawable/star_fill"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/noteTv"
+            android:contentDescription="@string/favorite"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

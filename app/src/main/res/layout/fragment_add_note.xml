@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.fragments.AddNoteFragment"
+    android:background="@color/dark_gray"
+    android:id="@+id/add_fragment_container">
+
+
+    <ScrollView
+        android:id="@+id/main_scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/colorList"
+        >
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/titleEdt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/title"
+                android:textColorHint="@color/gray"
+                android:padding="12dp"
+                android:textStyle="bold"
+                android:textColor="@color/toolbar_accent"
+                android:background="@android:color/transparent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:importantForAutofill="no"
+                />
+
+            <EditText
+                android:id="@+id/noteEdt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="50dp"
+                android:hint="@string/note"
+                android:textColor="@color/toolbar_accent"
+                android:textColorHint="@color/gray"
+                android:padding="12dp"
+                android:layout_marginTop="8dp"
+                android:background="@android:color/transparent"
+                app:layout_constraintTop_toBottomOf="@+id/titleEdt"
+                android:importantForAutofill="no" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+    <HorizontalScrollView
+        android:id="@+id/colorList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:background="@color/background_gray"
+        app:layout_constraintTop_toBottomOf="@+id/main_scroll_view"
+        app:layout_constraintBottom_toBottomOf="@id/add_note_btn"
+        >
+
+        <RadioGroup
+            android:id="@+id/colorGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <RadioButton
+                android:id="@+id/gray_button"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="12dp"
+                android:button="@android:color/transparent"
+                android:background="@drawable/colors_custom_item"
+                android:backgroundTint="@color/dark_gray"
+                />
+
+            <RadioButton
+                android:id="@+id/red_button"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="12dp"
+                android:button="@android:color/transparent"
+                android:background="@drawable/colors_custom_item"
+                android:backgroundTint="@color/red"
+                />
+
+            <RadioButton
+                android:id="@+id/orange_button"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="12dp"
+                android:button="@android:color/transparent"
+                android:background="@drawable/colors_custom_item"
+                android:backgroundTint="@color/orange"
+                />
+
+            <RadioButton
+                android:id="@+id/yellow_button"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="12dp"
+                android:button="@android:color/transparent"
+                android:background="@drawable/colors_custom_item"
+                android:backgroundTint="@color/yellow"
+                />
+
+            <RadioButton
+                android:id="@+id/green_button"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="12dp"
+                android:button="@android:color/transparent"
+                android:background="@drawable/colors_custom_item"
+                android:backgroundTint="@color/green"
+                />
+
+            <RadioButton
+                android:id="@+id/blue_button"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="12dp"
+                android:button="@android:color/transparent"
+                android:background="@drawable/colors_custom_item"
+                android:backgroundTint="@color/blue"
+                />
+
+            <RadioButton
+                android:id="@+id/purple_button"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="12dp"
+                android:button="@android:color/transparent"
+                android:background="@drawable/colors_custom_item"
+                android:backgroundTint="@color/purple"
+                />
+
+            <RadioButton
+                android:id="@+id/pink_button"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="12dp"
+                android:button="@android:color/transparent"
+                android:background="@drawable/colors_custom_item"
+                android:backgroundTint="@color/pink"
+                />
+
+            <RadioButton
+                android:id="@+id/brown_button"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="12dp"
+                android:button="@android:color/transparent"
+                android:background="@drawable/colors_custom_item"
+                android:backgroundTint="@color/brown"
+                />
+
+        </RadioGroup>
+    </HorizontalScrollView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/add_note_btn"
+        android:text="@string/add_note"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cornerRadius="10dp"
+        android:layout_margin="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/colorList"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

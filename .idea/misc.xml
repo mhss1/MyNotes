@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/Mohamed/AndroidStudioProjects/MyNotes-f/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.2203125" />
+        <entry key="..\:/Users/Mohamed/AndroidStudioProjects/MyNotes-f/app/src/main/res/drawable/add.xml" value="0.2203125" />
+        <entry key="..\:/Users/Mohamed/AndroidStudioProjects/MyNotes-f/app/src/main/res/drawable/app_icon_drawer.xml" value="0.20925925925925926" />
+        <entry key="..\:/Users/Mohamed/AndroidStudioProjects/MyNotes-f/app/src/main/res/drawable/check.xml" value="0.2203125" />
+        <entry key="..\:/Users/Mohamed/AndroidStudioProjects/MyNotes-f/app/src/main/res/drawable/circle_shape.xml" value="0.1125" />
+        <entry key="..\:/Users/Mohamed/AndroidStudioProjects/MyNotes-f/app/src/main/res/drawable/custom_drawer_item_color.xml" value="0.20925925925925926" />
+        <entry key="..\:/Users/Mohamed/AndroidStudioProjects/MyNotes-f/app/src/main/res/drawable/custom_round_corner_shape.xml" value="0.1125" />
+        <entry key="..\:/Users/Mohamed/AndroidStudioProjects/MyNotes-f/app/src/main/res/drawable/custom_search_ic.xml" value="0.1125" />
+        <entry key="..\:/Users/Mohamed/AndroidStudioProjects/MyNotes-f/app/src/main/res/drawable/drawer_custom_shape.xml" value="0.20925925925925926" />
+        <entry key="..\:/Users/Mohamed/AndroidStudioProjects/MyNotes-f/app/src/main/res/drawable/ic_launcher.xml" value="0.2203125" />
+        <entry key="..\:/Users/Mohamed/AndroidStudioProjects/MyNotes-f/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2203125" />
+        <entry key="..\:/Users/Mohamed/AndroidStudioProjects/MyNotes-f/app/src/main/res/drawable/search.xml" value="0.1125" />
+        <entry key="..\:/Users/Mohamed/AndroidStudioProjects/MyNotes-f/app/src/main/res/drawable/search_focused.xml" value="0.1125" />
+        <entry key="..\:/Users/Mohamed/AndroidStudioProjects/MyNotes-f/app/src/main/res/layout/activity_main.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Mohamed/AndroidStudioProjects/MyNotes-f/app/src/main/res/layout/custom_alert_dialog.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Mohamed/AndroidStudioProjects/MyNotes-f/app/src/main/res/layout/custom_rec_view_alert_dialog.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Mohamed/AndroidStudioProjects/MyNotes-f/app/src/main/res/layout/drawer_header.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Mohamed/AndroidStudioProjects/MyNotes-f/app/src/main/res/layout/fragment_about.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Mohamed/AndroidStudioProjects/MyNotes-f/app/src/main/res/layout/fragment_add_note.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Mohamed/AndroidStudioProjects/MyNotes-f/app/src/main/res/layout/fragment_app_info.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Mohamed/AndroidStudioProjects/MyNotes-f/app/src/main/res/layout/fragment_favorite.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Mohamed/AndroidStudioProjects/MyNotes-f/app/src/main/res/layout/fragment_main.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Mohamed/AndroidStudioProjects/MyNotes-f/app/src/main/res/layout/fragment_trash.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Mohamed/AndroidStudioProjects/MyNotes-f/app/src/main/res/layout/rec_custom_item.xml" value="0.16666666666666666" />
+        <entry key="..\:/Users/Mohamed/AndroidStudioProjects/MyNotes-f/app/src/main/res/menu/details_fragment_menu.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Mohamed/AndroidStudioProjects/MyNotes-f/app/src/main/res/menu/main_fragment_menu.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Mohamed/AndroidStudioProjects/MyNotes-f/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2203125" />
+        <entry key="..\:/Users/Mohamed/AndroidStudioProjects/MyNotes-f/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.2203125" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

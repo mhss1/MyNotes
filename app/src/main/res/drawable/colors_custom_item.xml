@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+<item android:state_checked="true" android:drawable="@drawable/check">
+    <shape >
+        <corners android:radius="999dp"/>
+    </shape>
+</item>
+
+    <item android:state_checked="false">
+        <shape >
+            <corners android:radius="999dp"/>
+        </shape>
+    </item>
+
+</selector>
