@@ -45,6 +45,7 @@
         app:layout_constraintTop_toBottomOf="@+id/search_layout"
         tools:listitem="@layout/rec_custom_item"
         android:layoutAnimation="@anim/rec_item_layout_animation"
+        android:transitionName="details_fragment"
         />
 
     <TextView
@@ -69,5 +70,6 @@
         android:src="@drawable/add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:contentDescription="@string/add_note" />
+        android:contentDescription="@string/add_note"
+        android:transitionName="add_fragment"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

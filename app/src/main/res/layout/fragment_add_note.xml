@@ -6,7 +6,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.fragments.AddNoteFragment"
     android:background="@color/dark_gray"
-    android:id="@+id/add_fragment_container">
+    android:id="@+id/add_fragment_container"
+    android:transitionName="add_fragment">
 
 
     <ScrollView

@@ -32,5 +32,6 @@
         android:layout_height="match_parent"
         tools:listitem="@layout/rec_custom_item"
         android:layoutAnimation="@anim/rec_item_layout_animation"
+        android:transitionName="details_fragment"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>

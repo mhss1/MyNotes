@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:background="@color/dark_gray"
     tools:context=".ui.fragments.DetailsFragment"
-    android:id="@+id/main_details_container">
+    android:id="@+id/main_details_container"
+    android:transitionName="details_fragment">
 
     <ScrollView
         android:id="@+id/main_scroll_view"

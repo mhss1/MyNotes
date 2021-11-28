@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.work.WorkManager
@@ -27,7 +28,8 @@ class TrashFragment : Fragment(R.layout.fragment_trash) {
         setHasOptionsMenu(true)
 
         val adapter = NoteRecAdapter{
-            findNavController().navigate(TrashFragmentDirections.actionTrashFragmentToDetailsFragment(it))
+            findNavController().navigate(TrashFragmentDirections.actionTrashFragmentToDetailsFragment(it),
+                    FragmentNavigatorExtras(binding.trashRec to "details_fragment"))
         }
         binding.trashRec.adapter = adapter
         binding.trashRec.layoutManager = StaggeredGridLayoutManager(2, 1)

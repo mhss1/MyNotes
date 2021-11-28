@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.mhss.app.mynotes.R
@@ -31,10 +32,13 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
         binding.favoriteRec.layoutManager = StaggeredGridLayoutManager(2, 1)
 
         val adapter = NoteRecAdapter {
-                findNavController().navigate(FavoriteFragmentDirections.actionFavoriteFragmentToDetailsFragment(it))
+            findNavController().navigate(
+                FavoriteFragmentDirections.actionFavoriteFragmentToDetailsFragment(it),
+                FragmentNavigatorExtras(binding.favoriteRec to "details_fragment")
+            )
         }
         binding.favoriteRec.adapter = adapter
-        viewModel.allFavoriteNotes.observe(viewLifecycleOwner,  {
+        viewModel.allFavoriteNotes.observe(viewLifecycleOwner, {
             binding.noFavoriteTv.visibility = if (it.isEmpty()) View.VISIBLE else View.GONE
             adapter.submitList(it)
         })

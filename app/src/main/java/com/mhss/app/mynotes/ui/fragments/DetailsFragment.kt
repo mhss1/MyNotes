@@ -14,6 +14,7 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.transition.MaterialContainerTransform
 import com.mhss.app.mynotes.R
 import com.mhss.app.mynotes.database.EmptyTrashWorker
 import com.mhss.app.mynotes.database.Note
@@ -42,13 +43,18 @@ class DetailsFragment : Fragment() {
 
     private var deleted = false
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        sharedElementEnterTransition = MaterialContainerTransform()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         note = args.note
-        if (viewModel.isNoteFavorite == null){
+        if (viewModel.isNoteFavorite == null) {
             viewModel.setNoteFavorite(note.favorite)
         }
 
@@ -136,12 +142,13 @@ class DetailsFragment : Fragment() {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(getString(R.string.move_note_to_trash))
             .setMessage(getString(R.string.move_note_trash_message))
-            .setPositiveButton(getString(R.string.yes)){_,_ ->
-                viewModel.updateNote(note.copy(
-                    // Also updates the note title and content because they might have been changed
-                    note = binding.noteEdt.text.toString(),
-                    title = binding.titleEdt.text.toString(),
-                    deleted = true
+            .setPositiveButton(getString(R.string.yes)) { _, _ ->
+                viewModel.updateNote(
+                    note.copy(
+                        // Also updates the note title and content because they might have been changed
+                        note = binding.noteEdt.text.toString(),
+                        title = binding.titleEdt.text.toString(),
+                        deleted = true
                     )
                 )
                 enqueueEmptyTrashWorker()
@@ -149,7 +156,7 @@ class DetailsFragment : Fragment() {
                 deleted = true
                 findNavController().navigate(DetailsFragmentDirections.actionDetailsFragmentToMainFragment())
             }
-            .setNegativeButton(getString(R.string.cancel)){_,_ ->
+            .setNegativeButton(getString(R.string.cancel)) { _, _ ->
                 return@setNegativeButton
             }
             .show()
@@ -159,12 +166,12 @@ class DetailsFragment : Fragment() {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(getString(R.string.delete_note))
             .setMessage(R.string.delete_note_forever_message)
-            .setPositiveButton(getString(R.string.yes)){_,_ ->
+            .setPositiveButton(getString(R.string.yes)) { _, _ ->
                 viewModel.deleteNote(note)
                 toast(getString(R.string.note_deleted))
                 findNavController().navigate(DetailsFragmentDirections.actionDetailsFragmentToMainFragment())
             }
-            .setNegativeButton(getString(R.string.cancel)){_,_ ->
+            .setNegativeButton(getString(R.string.cancel)) { _, _ ->
                 return@setNegativeButton
             }
             .show()
@@ -205,8 +212,8 @@ class DetailsFragment : Fragment() {
         }
     }
 
-    private fun toast(message: String)
-            = Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    private fun toast(message: String) =
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
 
     private fun colorToButtonId(color: Int) = when (color) {
         R.color.blue -> R.id.blue_button
@@ -219,6 +226,7 @@ class DetailsFragment : Fragment() {
         R.color.brown -> R.id.brown_button
         else -> R.id.gray_button
     }
+
     private fun buttonIdToColor(buttonId: Int) = when (buttonId) {
         R.id.blue_button -> R.color.blue
         R.id.green_button -> R.color.green
@@ -238,7 +246,7 @@ class DetailsFragment : Fragment() {
             val currentColor = buttonIdToColor(binding.colorGroup.checkedRadioButtonId)
             val currentFavorite = viewModel.isNoteFavorite == true
 
-            when(getNoteState(currentTitle, currentNoteContent, currentColor, currentFavorite)){
+            when (getNoteState(currentTitle, currentNoteContent, currentColor, currentFavorite)) {
                 NOTE_STATE_EDITED -> viewModel.updateNote(
                     note.copy(
                         title = currentTitle,
@@ -254,13 +262,18 @@ class DetailsFragment : Fragment() {
         super.onStop()
     }
 
-    private fun isNoteEdited(newTitle: String, CurrentNoteContent: String, currentColor: Int)
-            = newTitle != note.title || CurrentNoteContent != note.note || currentColor != note.color
+    private fun isNoteEdited(newTitle: String, CurrentNoteContent: String, currentColor: Int) =
+        newTitle != note.title || CurrentNoteContent != note.note || currentColor != note.color
 
-    private fun favoriteOnlyChanged(title:String, currentNote:String, color: Int, favorite: Boolean)
-    = title == note.title && currentNote == note.note && color == note.color && favorite != note.favorite
+    private fun favoriteOnlyChanged(
+        title: String,
+        currentNote: String,
+        color: Int,
+        favorite: Boolean
+    ) =
+        title == note.title && currentNote == note.note && color == note.color && favorite != note.favorite
 
-    private fun getNoteState(title:String, note:String, color: Int, favorite: Boolean): Int {
+    private fun getNoteState(title: String, note: String, color: Int, favorite: Boolean): Int {
         return when {
             isNoteEdited(title, note, color) -> NOTE_STATE_EDITED
             favoriteOnlyChanged(title, note, color, favorite) -> NOTE_STATE_FAVORITE_CHANGED
@@ -268,13 +281,17 @@ class DetailsFragment : Fragment() {
         }
     }
 
-    private fun enqueueEmptyTrashWorker(){
+    private fun enqueueEmptyTrashWorker() {
         val deleteRequest = OneTimeWorkRequestBuilder<EmptyTrashWorker>()
             .setInitialDelay(14, TimeUnit.DAYS)
             .build()
 
         WorkManager
             .getInstance(requireActivity())
-            .enqueueUniqueWork(getString(R.string.empty_trash_worker_name), ExistingWorkPolicy.REPLACE, deleteRequest)
+            .enqueueUniqueWork(
+                getString(R.string.empty_trash_worker_name),
+                ExistingWorkPolicy.REPLACE,
+                deleteRequest
+            )
     }
 }//END Fragment

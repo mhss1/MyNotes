@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.work.ExistingWorkPolicy
@@ -46,7 +47,8 @@ class MainFragment : Fragment() {
 
         noteAdapter = NoteRecAdapter {
             findNavController().navigate(
-                MainFragmentDirections.actionMainFragmentToDetailsFragment(it)
+                MainFragmentDirections.actionMainFragmentToDetailsFragment(it),
+                FragmentNavigatorExtras(binding.notesRec to "details_fragment")
             )
         }
         binding.notesRec.layoutManager = StaggeredGridLayoutManager(2, 1)
@@ -55,12 +57,15 @@ class MainFragment : Fragment() {
 
         binding.notesRec.adapter = noteAdapter
         binding.addNoteFab.setOnClickListener {
-            findNavController().navigate(MainFragmentDirections.actionMainFragmentToAddNoteFragment())
+            findNavController().navigate(
+                MainFragmentDirections.actionMainFragmentToAddNoteFragment(),
+                FragmentNavigatorExtras(it to "add_fragment")
+            )
         }
 
         binding.noteSearchEdt.addTextChangedListener {
             if (it.toString().isBlank()) observeAllNotes()
-            else viewModel.getNote(it.toString()){ list ->
+            else viewModel.getNote(it.toString()) { list ->
                 noteAdapter.submitList(list)
                 binding.notesRec.scheduleLayoutAnimation()
             }
@@ -84,33 +89,38 @@ class MainFragment : Fragment() {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(getString(R.string.delete_all_notes_dialog_title))
             .setMessage(getString(R.string.delete_all_notes_dialog_message))
-            .setPositiveButton(getString(R.string.yes)){_,_ ->
+            .setPositiveButton(getString(R.string.yes)) { _, _ ->
                 viewModel.moveAllNotesToTrash()
                 enqueueEmptyTrashWorker()
                 toast(getString(R.string.all_notes_moved_to_trash))
             }
-            .setNegativeButton(getString(R.string.cancel)){_,_ ->
+            .setNegativeButton(getString(R.string.cancel)) { _, _ ->
                 return@setNegativeButton
             }
             .show()
     }
 
-    private fun observeAllNotes() = viewModel.allNotes.observe(viewLifecycleOwner){ list ->
+    private fun observeAllNotes() = viewModel.allNotes.observe(viewLifecycleOwner) { list ->
         noteAdapter.submitList(list)
         binding.noNotes.visibility = if (list.isEmpty()) View.VISIBLE else View.GONE
         setHasOptionsMenu(list.isNotEmpty())
     }
+
     private fun toast(message: String) =
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
 
-    private fun enqueueEmptyTrashWorker(){
+    private fun enqueueEmptyTrashWorker() {
         val deleteRequest = OneTimeWorkRequestBuilder<EmptyTrashWorker>()
             .setInitialDelay(14, TimeUnit.DAYS)
             .build()
 
         WorkManager
             .getInstance(requireActivity())
-            .enqueueUniqueWork(getString(R.string.empty_trash_worker_name), ExistingWorkPolicy.REPLACE, deleteRequest)
+            .enqueueUniqueWork(
+                getString(R.string.empty_trash_worker_name),
+                ExistingWorkPolicy.REPLACE,
+                deleteRequest
+            )
     }
 
 }//END Fragment

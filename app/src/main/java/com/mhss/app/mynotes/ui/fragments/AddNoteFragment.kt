@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.transition.MaterialContainerTransform
 import com.mhss.app.mynotes.R
 import com.mhss.app.mynotes.database.Note
 import com.mhss.app.mynotes.databinding.FragmentAddNoteBinding
@@ -20,6 +21,11 @@ class AddNoteFragment : Fragment() {
 
     private lateinit var binding: FragmentAddNoteBinding
     private val viewModel: NoteViewModel by viewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        sharedElementEnterTransition = MaterialContainerTransform()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,7 +45,7 @@ class AddNoteFragment : Fragment() {
             val note = binding.noteEdt.text.toString()
             val color = buttonIdToColor(binding.colorGroup.checkedRadioButtonId)
 
-            if (title.isBlank() && note.isBlank()){
+            if (title.isBlank() && note.isBlank()) {
                 toast(getString(R.string.note_cannot_be_empty))
                 return@setOnClickListener
             }
@@ -72,6 +78,6 @@ class AddNoteFragment : Fragment() {
         else -> R.color.dark_gray
     }
 
-    private fun toast(message: String)
-            = Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    private fun toast(message: String) =
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
 }
