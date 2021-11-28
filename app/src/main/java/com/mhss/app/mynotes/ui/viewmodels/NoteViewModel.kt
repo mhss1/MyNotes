@@ -17,7 +17,7 @@ class NoteViewModel @Inject constructor(private val repository: NoteRepository) 
     val allFavoriteNotes: LiveData<List<Note>> = repository.allFavoriteNotes.asLiveData()
     val allDeletedNotes: LiveData<List<Note>> = repository.allDeletedNotes.asLiveData()
 
-    private var _isNoteFavorite: Boolean = false
+    private var _isNoteFavorite: Boolean? = null
     val isNoteFavorite
         get() = _isNoteFavorite
 

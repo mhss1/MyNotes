@@ -22,6 +22,10 @@ import com.mhss.app.mynotes.ui.viewmodels.NoteViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.concurrent.TimeUnit
 
+const val NOTE_STATE_EDITED = 1
+const val NOTE_STATE_FAVORITE_CHANGED = 2
+const val NOTE_STATE_NOT_EDITED = 0
+
 @AndroidEntryPoint
 class DetailsFragment : Fragment() {
 
@@ -44,7 +48,10 @@ class DetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         note = args.note
-        viewModel.setNoteFavorite(note.favorite)
+        if (viewModel.isNoteFavorite == null){
+            viewModel.setNoteFavorite(note.favorite)
+        }
+
 
         binding = FragmentDetailsBinding.inflate(inflater, container, false)
         setHasOptionsMenu(true)
@@ -62,7 +69,6 @@ class DetailsFragment : Fragment() {
 
         binding.colorGroup.setOnCheckedChangeListener { _, item ->
             handleColorChanged(buttonIdToColor(item))
-            viewModel.updateNote(note.copy(color = buttonIdToColor(item)))
         }
 
     }// END onViewCreated
@@ -182,12 +188,10 @@ class DetailsFragment : Fragment() {
     }
 
     private fun handleFavoriteClicked() {
-        if (viewModel.isNoteFavorite) {
-            viewModel.updateNote(note.copy(favorite = false))
+        if (viewModel.isNoteFavorite == true) {
             favoriteMenuItem.setIcon(R.drawable.star_border)
             viewModel.setNoteFavorite(false)
         } else {
-            viewModel.updateNote(note.copy(favorite = true))
             favoriteMenuItem.setIcon(R.drawable.star_fill)
             viewModel.setNoteFavorite(true)
         }
@@ -196,7 +200,7 @@ class DetailsFragment : Fragment() {
 
     private fun setupFavoriteButton() {
         favoriteMenuItem.apply {
-            if (note.favorite) setIcon(R.drawable.star_fill)
+            if (viewModel.isNoteFavorite == true) setIcon(R.drawable.star_fill)
             else setIcon(R.drawable.star_border)
         }
     }
@@ -231,20 +235,38 @@ class DetailsFragment : Fragment() {
         if (!deleted) {
             val currentTitle = binding.titleEdt.text.toString()
             val currentNoteContent = binding.noteEdt.text.toString()
-            if (isNoteEdited(currentTitle, currentNoteContent))
-                viewModel.updateNote(
+            val currentColor = buttonIdToColor(binding.colorGroup.checkedRadioButtonId)
+            val currentFavorite = viewModel.isNoteFavorite == true
+
+            when(getNoteState(currentTitle, currentNoteContent, currentColor, currentFavorite)){
+                NOTE_STATE_EDITED -> viewModel.updateNote(
                     note.copy(
                         title = currentTitle,
                         note = currentNoteContent,
+                        color = currentColor,
+                        favorite = currentFavorite,
                         date = System.currentTimeMillis()
                     )
                 )
+                NOTE_STATE_FAVORITE_CHANGED -> viewModel.updateNote(note.copy(favorite = currentFavorite))
+            }
         }
         super.onStop()
     }
 
-    private fun isNoteEdited(newTitle: String, CurrentNoteContent: String)
-            = newTitle != note.title || CurrentNoteContent != note.note
+    private fun isNoteEdited(newTitle: String, CurrentNoteContent: String, currentColor: Int)
+            = newTitle != note.title || CurrentNoteContent != note.note || currentColor != note.color
+
+    private fun favoriteOnlyChanged(title:String, currentNote:String, color: Int, favorite: Boolean)
+    = title == note.title && currentNote == note.note && color == note.color && favorite != note.favorite
+
+    private fun getNoteState(title:String, note:String, color: Int, favorite: Boolean): Int {
+        return when {
+            isNoteEdited(title, note, color) -> NOTE_STATE_EDITED
+            favoriteOnlyChanged(title, note, color, favorite) -> NOTE_STATE_FAVORITE_CHANGED
+            else -> NOTE_STATE_NOT_EDITED
+        }
+    }
 
     private fun enqueueEmptyTrashWorker(){
         val deleteRequest = OneTimeWorkRequestBuilder<EmptyTrashWorker>()
