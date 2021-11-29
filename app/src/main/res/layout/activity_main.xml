@@ -20,7 +20,8 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:titleMarginTop="14dp"
-            android:background="@color/colorPrimary"
+            style="@style/Widget.MaterialComponents.Toolbar.Primary"
+            android:elevation="0dp"
             />
 
     <androidx.fragment.app.FragmentContainerView

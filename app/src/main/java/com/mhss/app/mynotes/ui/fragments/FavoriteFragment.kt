@@ -31,10 +31,10 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
 
         binding.favoriteRec.layoutManager = StaggeredGridLayoutManager(2, 1)
 
-        val adapter = NoteRecAdapter {
+        val adapter = NoteRecAdapter {note, card ->
             findNavController().navigate(
-                FavoriteFragmentDirections.actionFavoriteFragmentToDetailsFragment(it),
-                FragmentNavigatorExtras(binding.favoriteRec to "details_fragment")
+                FavoriteFragmentDirections.actionFavoriteFragmentToDetailsFragment(note),
+                FragmentNavigatorExtras(card to card.transitionName)
             )
         }
         binding.favoriteRec.adapter = adapter
@@ -42,7 +42,11 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
             binding.noFavoriteTv.visibility = if (it.isEmpty()) View.VISIBLE else View.GONE
             adapter.submitList(it)
         })
-
+        postponeEnterTransition()
+        binding.favoriteRec.viewTreeObserver.addOnPreDrawListener {
+            startPostponedEnterTransition()
+            true
+        }
     }
 
 }

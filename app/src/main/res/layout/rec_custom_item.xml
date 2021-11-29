@@ -5,11 +5,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     app:cardCornerRadius="18dp"
-    app:cardElevation="10dp"
+    app:cardElevation="12dp"
     android:layout_margin="8dp"
     tools:cardBackgroundColor="@color/dark_gray"
     android:id="@+id/holder_card"
-    android:layoutAnimation="@anim/rec_single_item_layout_animation"
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -35,7 +34,8 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Test Note Title " />
+            tools:text="Test Note Title "
+            />
 
         <TextView
             android:id="@+id/noteTv"
@@ -54,7 +54,8 @@
             app:layout_constraintHorizontal_weight="3"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/titleTv"
-            tools:text="Test Note next..." />
+            tools:text="Test Note next..."
+            />
 
         <TextView
             android:id="@+id/dateTv"

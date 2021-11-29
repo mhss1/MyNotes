@@ -43,11 +43,6 @@ class DetailsFragment : Fragment() {
 
     private var deleted = false
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        sharedElementEnterTransition = MaterialContainerTransform()
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -57,25 +52,25 @@ class DetailsFragment : Fragment() {
         if (viewModel.isNoteFavorite == null) {
             viewModel.setNoteFavorite(note.favorite)
         }
-
-
         binding = FragmentDetailsBinding.inflate(inflater, container, false)
         setHasOptionsMenu(true)
         (requireActivity() as AppCompatActivity).supportActionBar?.title = note.title
 
+        sharedElementEnterTransition = MaterialContainerTransform()
         return binding.root
     }// END onCreateView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.mainDetailsContainer.transitionName = note.id.toString()
 
         binding.titleEdt.setText(note.title)
         binding.noteEdt.setText(note.note)
-        binding.colorGroup.check(colorToButtonId(note.color))
 
         binding.colorGroup.setOnCheckedChangeListener { _, item ->
             handleColorChanged(buttonIdToColor(item))
         }
+        binding.colorGroup.check(colorToButtonId(note.color))
 
     }// END onViewCreated
 

@@ -29,6 +29,7 @@
         android:padding="12dp"
         android:hint="@string/search_note"
         android:drawableStart="@drawable/custom_search_ic"
+        android:drawablePadding="8dp"
         android:inputType="text"
         />
 

@@ -3,6 +3,7 @@ package com.mhss.app.mynotes.ui.fragments
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
+import androidx.core.view.doOnPreDraw
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -13,6 +14,7 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.transition.MaterialContainerTransform
 import com.mhss.app.mynotes.R
 import com.mhss.app.mynotes.database.EmptyTrashWorker
 import com.mhss.app.mynotes.databinding.FragmentMainBinding
@@ -37,6 +39,7 @@ class MainFragment : Fragment() {
     ): View {
         setHasOptionsMenu(true)
         binding = FragmentMainBinding.inflate(inflater, container, false)
+        sharedElementReturnTransition = MaterialContainerTransform()
         return binding.root
     }
 
@@ -45,17 +48,17 @@ class MainFragment : Fragment() {
 
         binding.noteSearchEdt.clearFocus()
 
-        noteAdapter = NoteRecAdapter {
+        noteAdapter = NoteRecAdapter {note, card ->
             findNavController().navigate(
-                MainFragmentDirections.actionMainFragmentToDetailsFragment(it),
-                FragmentNavigatorExtras(binding.notesRec to "details_fragment")
+                MainFragmentDirections.actionMainFragmentToDetailsFragment(note),
+                FragmentNavigatorExtras(card to card.transitionName)
             )
         }
+        binding.notesRec.adapter = noteAdapter
         binding.notesRec.layoutManager = StaggeredGridLayoutManager(2, 1)
 
         observeAllNotes()
 
-        binding.notesRec.adapter = noteAdapter
         binding.addNoteFab.setOnClickListener {
             findNavController().navigate(
                 MainFragmentDirections.actionMainFragmentToAddNoteFragment(),
@@ -71,6 +74,11 @@ class MainFragment : Fragment() {
             }
         }
 
+        postponeEnterTransition()
+        binding.notesRec.viewTreeObserver.addOnPreDrawListener {
+            startPostponedEnterTransition()
+            true
+        }
     }//End onViewCreated
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

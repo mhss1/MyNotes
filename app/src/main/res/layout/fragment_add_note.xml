@@ -58,9 +58,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="8dp"
-        android:background="@color/background_gray"
         app:layout_constraintTop_toBottomOf="@+id/main_scroll_view"
         app:layout_constraintBottom_toBottomOf="@id/add_note_btn"
+        android:background="?android:colorBackground"
+
         >
 
         <RadioGroup

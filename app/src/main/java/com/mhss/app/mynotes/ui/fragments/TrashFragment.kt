@@ -27,9 +27,9 @@ class TrashFragment : Fragment(R.layout.fragment_trash) {
         binding = FragmentTrashBinding.bind(view)
         setHasOptionsMenu(true)
 
-        val adapter = NoteRecAdapter{
+        val adapter = NoteRecAdapter{it, card ->
             findNavController().navigate(TrashFragmentDirections.actionTrashFragmentToDetailsFragment(it),
-                    FragmentNavigatorExtras(binding.trashRec to "details_fragment"))
+                    FragmentNavigatorExtras(card to card.transitionName))
         }
         binding.trashRec.adapter = adapter
         binding.trashRec.layoutManager = StaggeredGridLayoutManager(2, 1)
@@ -39,6 +39,11 @@ class TrashFragment : Fragment(R.layout.fragment_trash) {
             adapter.submitList(list)
             emptyMenuItem.isVisible = list.isNotEmpty()
         })
+        postponeEnterTransition()
+        binding.trashRec.viewTreeObserver.addOnPreDrawListener {
+            startPostponedEnterTransition()
+            true
+        }
     }
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)

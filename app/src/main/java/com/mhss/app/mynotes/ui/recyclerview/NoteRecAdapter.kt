@@ -14,8 +14,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class NoteRecAdapter(
-    private val onItemClicked: (Note) -> Unit)
-    : ListAdapter<Note, NoteRecAdapter.NoteViewHolder>(DiffCallback) {
+    private val onItemClicked: (Note, View) -> Unit
+) : ListAdapter<Note, NoteRecAdapter.NoteViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
         return NoteViewHolder(
@@ -28,15 +28,22 @@ class NoteRecAdapter(
         holder.bind(current)
     }
 
-    inner class NoteViewHolder(private var binding: RecCustomItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(note: Note){
+    inner class NoteViewHolder(private var binding: RecCustomItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(note: Note) {
             binding.apply {
                 titleTv.text = note.title
                 noteTv.text = note.note
                 starIcRecItem.visibility = if (note.favorite) View.VISIBLE else View.GONE
 
-                holderCard.setCardBackgroundColor(ContextCompat.getColor(itemView.context, note.color))
-                holderCard.setOnClickListener { onItemClicked(note) }
+                holderCard.setCardBackgroundColor(
+                    ContextCompat.getColor(
+                        itemView.context,
+                        note.color
+                    )
+                )
+                holderCard.transitionName = note.id.toString()
+                holderCard.setOnClickListener { onItemClicked(note, it) }
 
                 dateTv.text = getFormattedDate(note.date)
 
@@ -56,15 +63,15 @@ class NoteRecAdapter(
         }
     }
 
-    fun getFormattedDate(date: Long): String{
+    fun getFormattedDate(date: Long): String {
         val sdf = SimpleDateFormat("MMM dd,yyyy", Locale.getDefault())
         val stf = SimpleDateFormat("h:mm a", Locale.getDefault())
 
         val calender = Calendar.getInstance()
         calender.timeInMillis = date
-        return if (DateUtils.isToday(date)){
+        return if (DateUtils.isToday(date)) {
             stf.format(calender.time)
-        }else
+        } else
             sdf.format(calender.time)
     }
 }
