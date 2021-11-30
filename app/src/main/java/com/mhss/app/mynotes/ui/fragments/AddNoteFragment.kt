@@ -4,11 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import com.google.android.material.transition.MaterialContainerTransform
 import com.mhss.app.mynotes.R
 import com.mhss.app.mynotes.database.Note
@@ -40,25 +38,10 @@ class AddNoteFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.colorGroup.check(R.id.gray_button)
 
-        binding.addNoteBtn.setOnClickListener {
-            val title = binding.titleEdt.text.toString()
-            val note = binding.noteEdt.text.toString()
-            val color = buttonIdToColor(binding.colorGroup.checkedRadioButtonId)
-
-            if (title.isBlank() && note.isBlank()) {
-                toast(getString(R.string.note_cannot_be_empty))
-                return@setOnClickListener
-            }
-            viewModel.insertNote(Note(title, note, System.currentTimeMillis(), color = color))
-            toast(getString(R.string.note_added))
-            findNavController().navigateUp()
-        }
-
         binding.colorGroup.setOnCheckedChangeListener { _, id ->
             handleColorChanged(buttonIdToColor(id))
         }
     }
-
 
     private fun handleColorChanged(color: Int) {
         binding.addFragmentContainer.setBackgroundColor(
@@ -78,6 +61,14 @@ class AddNoteFragment : Fragment() {
         else -> R.color.dark_gray
     }
 
-    private fun toast(message: String) =
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    override fun onStop() {
+        val title = binding.titleEdt.text.toString()
+        val note = binding.noteEdt.text.toString()
+        val color = buttonIdToColor(binding.colorGroup.checkedRadioButtonId)
+
+        if (title.isNotBlank() || note.isNotBlank())
+            viewModel.insertNote(Note(title, note, System.currentTimeMillis(), color = color))
+
+        super.onStop()
+    }
 }

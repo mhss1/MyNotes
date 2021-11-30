@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.fragments.MainFragment">
-
 <com.google.android.material.textfield.TextInputLayout
     android:id="@+id/search_layout"
     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -46,7 +45,6 @@
         app:layout_constraintTop_toBottomOf="@+id/search_layout"
         tools:listitem="@layout/rec_custom_item"
         android:layoutAnimation="@anim/rec_item_layout_animation"
-        android:transitionName="details_fragment"
         />
 
     <TextView

@@ -36,10 +36,10 @@
         <entry key="..\:/Users/Mohamed/AndroidStudioProjects/MyNotes/app/src/main/res/drawable/search.xml" value="0.2169230769230769" />
         <entry key="..\:/Users/Mohamed/AndroidStudioProjects/MyNotes/app/src/main/res/drawable/search_focused.xml" value="0.2169230769230769" />
         <entry key="..\:/Users/Mohamed/AndroidStudioProjects/MyNotes/app/src/main/res/layout/activity_main.xml" value="0.20416666666666666" />
-        <entry key="..\:/Users/Mohamed/AndroidStudioProjects/MyNotes/app/src/main/res/layout/fragment_add_note.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Mohamed/AndroidStudioProjects/MyNotes/app/src/main/res/layout/fragment_add_note.xml" value="0.25" />
         <entry key="..\:/Users/Mohamed/AndroidStudioProjects/MyNotes/app/src/main/res/layout/fragment_details.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Mohamed/AndroidStudioProjects/MyNotes/app/src/main/res/layout/fragment_favorite.xml" value="0.1" />
-        <entry key="..\:/Users/Mohamed/AndroidStudioProjects/MyNotes/app/src/main/res/layout/fragment_main.xml" value="0.1" />
+        <entry key="..\:/Users/Mohamed/AndroidStudioProjects/MyNotes/app/src/main/res/layout/fragment_main.xml" value="0.15" />
         <entry key="..\:/Users/Mohamed/AndroidStudioProjects/MyNotes/app/src/main/res/layout/fragment_trash.xml" value="0.1" />
         <entry key="..\:/Users/Mohamed/AndroidStudioProjects/MyNotes/app/src/main/res/layout/rec_custom_item.xml" value="0.20416666666666666" />
       </map>

@@ -3,7 +3,6 @@ package com.mhss.app.mynotes.ui.fragments
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
-import androidx.core.view.doOnPreDraw
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
