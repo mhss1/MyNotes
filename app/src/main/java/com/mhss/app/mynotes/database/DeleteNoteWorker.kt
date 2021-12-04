@@ -8,14 +8,15 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 
 @HiltWorker
-class EmptyTrashWorker @AssistedInject constructor(
+class DeleteNoteWorker @AssistedInject constructor(
     @Assisted context: Context,
     @Assisted workerParams: WorkerParameters,
     private val notesRepository: NoteRepository
 ) : CoroutineWorker(context, workerParams) {
 
     override suspend fun doWork(): Result {
-        notesRepository.deleteNotesInTrash()
+        val id = inputData.getInt("id", 0)
+        notesRepository.deleteNoteById(id)
         return Result.success()
     }
 

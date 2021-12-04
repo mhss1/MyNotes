@@ -65,7 +65,7 @@ class TrashFragment : Fragment(R.layout.fragment_trash) {
             .setTitle(getString(R.string.empty_trash))
             .setPositiveButton(getString(R.string.yes)){_,_ ->
                 viewModel.deleteNotesInTrash()
-                cancelEmptyTrashWorker()
+                cancelAllDeleteWorkers()
             }
             .setNegativeButton(getString(R.string.cancel)){_,_ ->
                 return@setNegativeButton
@@ -73,10 +73,8 @@ class TrashFragment : Fragment(R.layout.fragment_trash) {
             .show()
     }
 
-    private fun cancelEmptyTrashWorker(){
+    private fun cancelAllDeleteWorkers(){
         WorkManager.getInstance(requireActivity())
-            .cancelUniqueWork(
-            getString(R.string.empty_trash_worker_name)
-        )
+            .cancelAllWork()
     }
 }//END Fragment

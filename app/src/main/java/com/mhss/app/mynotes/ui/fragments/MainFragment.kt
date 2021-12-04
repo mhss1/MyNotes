@@ -1,7 +1,9 @@
 package com.mhss.app.mynotes.ui.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.*
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -12,10 +14,11 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
+import androidx.work.workDataOf
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.transition.MaterialContainerTransform
 import com.mhss.app.mynotes.R
-import com.mhss.app.mynotes.database.EmptyTrashWorker
+import com.mhss.app.mynotes.database.DeleteNoteWorker
 import com.mhss.app.mynotes.databinding.FragmentMainBinding
 import com.mhss.app.mynotes.ui.recyclerview.NoteRecAdapter
 import com.mhss.app.mynotes.ui.viewmodels.NoteViewModel
@@ -46,6 +49,7 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.noteSearchEdt.clearFocus()
+        hideKeyboard()
 
         noteAdapter = NoteRecAdapter {note, card ->
             findNavController().navigate(
@@ -98,7 +102,9 @@ class MainFragment : Fragment() {
             .setMessage(getString(R.string.delete_all_notes_dialog_message))
             .setPositiveButton(getString(R.string.yes)) { _, _ ->
                 viewModel.moveAllNotesToTrash()
-                enqueueEmptyTrashWorker()
+                viewModel.allNotes.value?.forEach {
+                    enqueueDeleteNoteWorker(it.id!!)
+                }
                 toast(getString(R.string.all_notes_moved_to_trash))
             }
             .setNegativeButton(getString(R.string.cancel)) { _, _ ->
@@ -116,18 +122,26 @@ class MainFragment : Fragment() {
     private fun toast(message: String) =
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
 
-    private fun enqueueEmptyTrashWorker() {
-        val deleteRequest = OneTimeWorkRequestBuilder<EmptyTrashWorker>()
+    private fun enqueueDeleteNoteWorker(id: Int) {
+        val deleteRequest = OneTimeWorkRequestBuilder<DeleteNoteWorker>()
+            .setInputData(workDataOf("id" to id))
             .setInitialDelay(14, TimeUnit.DAYS)
             .build()
 
         WorkManager
             .getInstance(requireActivity())
             .enqueueUniqueWork(
-                getString(R.string.empty_trash_worker_name),
+                id.toString(),
                 ExistingWorkPolicy.REPLACE,
                 deleteRequest
             )
+    }
+
+    private fun hideKeyboard(){
+        activity?.currentFocus?.let { view ->
+            val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            imm?.hideSoftInputFromWindow(view.windowToken, 0)
+        }
     }
 
 }//END Fragment

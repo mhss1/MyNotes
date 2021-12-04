@@ -13,10 +13,11 @@ import androidx.navigation.fragment.navArgs
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
+import androidx.work.workDataOf
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.transition.MaterialContainerTransform
 import com.mhss.app.mynotes.R
-import com.mhss.app.mynotes.database.EmptyTrashWorker
+import com.mhss.app.mynotes.database.DeleteNoteWorker
 import com.mhss.app.mynotes.database.Note
 import com.mhss.app.mynotes.databinding.FragmentDetailsBinding
 import com.mhss.app.mynotes.ui.viewmodels.NoteViewModel
@@ -146,7 +147,7 @@ class DetailsFragment : Fragment() {
                         deleted = true
                     )
                 )
-                enqueueEmptyTrashWorker()
+                enqueueDeleteNoteWorker(note.id!!)
                 toast(getString(R.string.note_moved_to_trash))
                 deleted = true
                 findNavController().navigate(DetailsFragmentDirections.actionDetailsFragmentToMainFragment())
@@ -163,6 +164,7 @@ class DetailsFragment : Fragment() {
             .setMessage(R.string.delete_note_forever_message)
             .setPositiveButton(getString(R.string.yes)) { _, _ ->
                 viewModel.deleteNote(note)
+                cancelWorker(note.id.toString())
                 toast(getString(R.string.note_deleted))
                 findNavController().navigate(DetailsFragmentDirections.actionDetailsFragmentToMainFragment())
             }
@@ -184,6 +186,7 @@ class DetailsFragment : Fragment() {
             R.id.delete_forever -> showDeleteForeverDialog()
             R.id.restore -> {
                 viewModel.updateNote(note.copy(deleted = false))
+                cancelWorker(note.id.toString())
                 findNavController().navigate(DetailsFragmentDirections.actionDetailsFragmentToMainFragment())
             }
         }
@@ -276,17 +279,23 @@ class DetailsFragment : Fragment() {
         }
     }
 
-    private fun enqueueEmptyTrashWorker() {
-        val deleteRequest = OneTimeWorkRequestBuilder<EmptyTrashWorker>()
+    private fun enqueueDeleteNoteWorker(id: Int) {
+        val deleteRequest = OneTimeWorkRequestBuilder<DeleteNoteWorker>()
+            .setInputData(workDataOf("id" to id))
             .setInitialDelay(14, TimeUnit.DAYS)
             .build()
 
         WorkManager
             .getInstance(requireActivity())
             .enqueueUniqueWork(
-                getString(R.string.empty_trash_worker_name),
+                id.toString(),
                 ExistingWorkPolicy.REPLACE,
                 deleteRequest
             )
+    }
+
+    private fun cancelWorker(name: String){
+        WorkManager.getInstance(requireActivity())
+            .cancelUniqueWork(name)
     }
 }//END Fragment
