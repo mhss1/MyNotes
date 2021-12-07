@@ -27,10 +27,10 @@ interface NotesDao {
     @Query("SELECT * from notes_table WHERE deleted = 0 ORDER BY date DESC")
     fun getAllNotes(): Flow<List<Note>>
 
-    @Query("SELECT * from notes_table WHERE favorite = 1 AND deleted = 0")
+    @Query("SELECT * from notes_table WHERE favorite = 1 AND deleted = 0 ORDER BY date DESC")
     fun getAllFavoriteNotes(): Flow<List<Note>>
 
-    @Query("SELECT * from notes_table WHERE deleted = 1 ")
+    @Query("SELECT * from notes_table WHERE deleted = 1 ORDER BY date DESC")
     fun getAllDeletedNotes(): Flow<List<Note>>
 
     @Query("SELECT * from notes_table WHERE title LIKE :query OR note LIKE :query AND deleted = 0")

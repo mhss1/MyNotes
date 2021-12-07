@@ -237,7 +237,7 @@ class DetailsFragment : Fragment() {
         else -> R.color.dark_gray
     }
 
-    override fun onStop() {
+    override fun onDestroyView() {
         if (!deleted) {
             val currentTitle = binding.titleEdt.text.toString()
             val currentNoteContent = binding.noteEdt.text.toString()
@@ -257,7 +257,7 @@ class DetailsFragment : Fragment() {
                 NOTE_STATE_FAVORITE_CHANGED -> viewModel.updateNote(note.copy(favorite = currentFavorite))
             }
         }
-        super.onStop()
+        super.onDestroyView()
     }
 
     private fun isNoteEdited(newTitle: String, CurrentNoteContent: String, currentColor: Int) =
