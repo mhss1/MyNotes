@@ -3,12 +3,16 @@ package com.mhss.app.mynotes.ui.fragments
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
+import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.lifecycle.asLiveData
+import kotlinx.coroutines.flow.map
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.mhss.app.mynotes.R
 import com.mhss.app.mynotes.databinding.FragmentFavoriteBinding
@@ -29,7 +33,11 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
         )
         binding = FragmentFavoriteBinding.bind(view)
 
-        binding.favoriteRec.layoutManager = StaggeredGridLayoutManager(2, 1)
+        readDataStore().observe(viewLifecycleOwner){
+            binding.favoriteRec.layoutManager =
+                if (it == 0) StaggeredGridLayoutManager(2, 1)
+                else LinearLayoutManager(requireContext())
+        }
 
         val adapter = NoteRecAdapter {note, card ->
             findNavController().navigate(
@@ -48,5 +56,11 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
             true
         }
     }
+
+    private fun readDataStore() =
+        requireContext().dataStore.data
+            .map { preferences ->
+                preferences[intPreferencesKey(getString(R.string.view))] ?: 0
+            }.asLiveData()
 
 }

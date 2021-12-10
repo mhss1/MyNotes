@@ -1,15 +1,26 @@
 package com.mhss.app.mynotes.ui.fragments
 
+import androidx.appcompat.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.lifecycle.asLiveData
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
@@ -25,6 +36,7 @@ import com.mhss.app.mynotes.ui.viewmodels.NoteViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.concurrent.TimeUnit
 
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
 @AndroidEntryPoint
 class MainFragment : Fragment() {
@@ -33,6 +45,8 @@ class MainFragment : Fragment() {
     private lateinit var binding: FragmentMainBinding
 
     private lateinit var noteAdapter: NoteRecAdapter
+
+    private var currentView = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,7 +72,14 @@ class MainFragment : Fragment() {
             )
         }
         binding.notesRec.adapter = noteAdapter
-        binding.notesRec.layoutManager = StaggeredGridLayoutManager(2, 1)
+        readDataStore().observe(viewLifecycleOwner){
+            binding.notesRec.layoutManager =
+                if (it == 0) StaggeredGridLayoutManager(2, 1)
+                else LinearLayoutManager(requireContext())
+
+                currentView = it
+                binding.notesRec.scheduleLayoutAnimation()
+        }
 
         observeAllNotes()
 
@@ -90,9 +111,10 @@ class MainFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.delete_all)
-            showDeleteAllNotesDialog()
-
+        when(item.itemId ){
+            R.id.delete_all -> showDeleteAllNotesDialog()
+            R.id.view -> showViewDialog()
+        }
         return super.onOptionsItemSelected(item)
     }
 
@@ -143,5 +165,34 @@ class MainFragment : Fragment() {
             imm?.hideSoftInputFromWindow(view.windowToken, 0)
         }
     }
+
+    private fun writeDatastore(view: Int){
+        lifecycleScope.launch{
+            val key = intPreferencesKey(getString(R.string.view))
+            requireContext().dataStore.edit { settings ->
+                settings[key] = view
+            }
+        }
+    }
+
+    private fun readDataStore() =
+        requireContext().dataStore.data
+            .map { preferences ->
+                preferences[intPreferencesKey(getString(R.string.view))] ?: 0
+            }.asLiveData()
+
+    private fun showViewDialog(){
+        val choices = arrayOf(getString(R.string.grid), getString(R.string.list))
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(getString(R.string.choose_view))
+            .setNeutralButton(resources.getString(R.string.cancel)) { _, _ -> }
+            .setPositiveButton(resources.getString(R.string.save)) { dialog, which ->
+                    writeDatastore((dialog as AlertDialog).listView.checkedItemPosition)
+                    toast(getString(R.string.view_saved))
+            }
+            .setSingleChoiceItems(choices, currentView){_, _ -> }
+            .show()
+    }
+
 
 }//END Fragment

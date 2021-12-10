@@ -2,10 +2,14 @@ package com.mhss.app.mynotes.ui.fragments
 
 import android.os.Bundle
 import android.view.*
+import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.lifecycle.asLiveData
+import kotlinx.coroutines.flow.map
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.work.WorkManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -32,7 +36,11 @@ class TrashFragment : Fragment(R.layout.fragment_trash) {
                     FragmentNavigatorExtras(card to card.transitionName))
         }
         binding.trashRec.adapter = adapter
-        binding.trashRec.layoutManager = StaggeredGridLayoutManager(2, 1)
+        readDataStore().observe(viewLifecycleOwner){
+            binding.trashRec.layoutManager =
+                if (it == 0) StaggeredGridLayoutManager(2, 1)
+                else LinearLayoutManager(requireContext())
+        }
 
         viewModel.allDeletedNotes.observe(viewLifecycleOwner, { list ->
             binding.noTrashTv.visibility = if(list.isEmpty()) View.VISIBLE else View.GONE
@@ -77,4 +85,10 @@ class TrashFragment : Fragment(R.layout.fragment_trash) {
         WorkManager.getInstance(requireActivity())
             .cancelAllWork()
     }
+
+    private fun readDataStore() =
+        requireContext().dataStore.data
+            .map { preferences ->
+                preferences[intPreferencesKey(getString(R.string.view))] ?: 0
+            }.asLiveData()
 }//END Fragment
