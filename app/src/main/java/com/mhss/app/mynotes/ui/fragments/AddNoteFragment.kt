@@ -61,7 +61,7 @@ class AddNoteFragment : Fragment() {
         else -> R.color.dark_gray
     }
 
-    override fun onStop() {
+    override fun onDestroyView() {
         val title = binding.titleEdt.text.toString()
         val note = binding.noteEdt.text.toString()
         val color = buttonIdToColor(binding.colorGroup.checkedRadioButtonId)
@@ -69,6 +69,6 @@ class AddNoteFragment : Fragment() {
         if (title.isNotBlank() || note.isNotBlank())
             viewModel.insertNote(Note(title, note, System.currentTimeMillis(), color = color))
 
-        super.onStop()
+        super.onDestroyView()
     }
 }
