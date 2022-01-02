@@ -5,9 +5,10 @@ An application where you can Create and Customize you notes.
 
 ## Features:
 - Create new notes
-- Customize the notes by changing their color, title or content
+- Customize the notes by changing their color, list view or edit title and content
 - Add important notes to favorite 
 - Modern UI and smooth animations
+- Dark and Light theme
 - Deleted note gets deleted forever after 14 days
 
 
