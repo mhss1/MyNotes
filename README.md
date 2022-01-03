@@ -1,7 +1,8 @@
 # My Notes
 An application where you can Create and Customize you notes.
 
-![Alt text](/screenshots.jpg?raw=true)
+![screenshots1](https://user-images.githubusercontent.com/58703865/147923680-8408950b-f4e4-40cf-b1b3-1ede5d608135.jpg)
+
 
 ## Features:
 - Create new notes
