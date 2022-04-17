@@ -10,6 +10,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,6 +22,7 @@ import com.mhss.app.mynotes.databinding.FragmentFavoriteBinding
 import com.mhss.app.mynotes.ui.recyclerview.NoteRecAdapter
 import com.mhss.app.mynotes.ui.viewmodels.NoteViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
@@ -46,10 +50,15 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
             )
         }
         binding.favoriteRec.adapter = adapter
-        viewModel.allFavoriteNotes.observe(viewLifecycleOwner, {
-            binding.noFavoriteTv.visibility = if (it.isEmpty()) View.VISIBLE else View.GONE
-            adapter.submitList(it)
-        })
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.allFavoriteNotes.collect {
+                    binding.noFavoriteTv.visibility = if (it.isEmpty()) View.VISIBLE else View.GONE
+                    adapter.submitList(it)
+                }
+            }
+        }
+
         postponeEnterTransition()
         binding.favoriteRec.viewTreeObserver.addOnPreDrawListener {
             startPostponedEnterTransition()

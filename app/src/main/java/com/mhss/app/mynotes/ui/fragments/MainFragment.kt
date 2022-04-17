@@ -17,7 +17,9 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -34,6 +36,7 @@ import com.mhss.app.mynotes.databinding.FragmentMainBinding
 import com.mhss.app.mynotes.ui.recyclerview.NoteRecAdapter
 import com.mhss.app.mynotes.ui.viewmodels.NoteViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.first
 import java.util.concurrent.TimeUnit
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
@@ -124,8 +127,10 @@ class MainFragment : Fragment() {
             .setMessage(getString(R.string.delete_all_notes_dialog_message))
             .setPositiveButton(getString(R.string.yes)) { _, _ ->
                 viewModel.moveAllNotesToTrash()
-                viewModel.allNotes.value?.forEach {
-                    enqueueDeleteNoteWorker(it.id!!)
+                viewLifecycleOwner.lifecycleScope.launch {
+                    viewModel.allNotes.first().forEach {
+                        enqueueDeleteNoteWorker(it.id!!)
+                    }
                 }
                 toast(getString(R.string.all_notes_moved_to_trash))
             }
@@ -135,11 +140,16 @@ class MainFragment : Fragment() {
             .show()
     }
 
-    private fun observeAllNotes() = viewModel.allNotes.observe(viewLifecycleOwner) { list ->
-        noteAdapter.submitList(list)
-        binding.noNotes.visibility = if (list.isEmpty()) View.VISIBLE else View.GONE
-        setHasOptionsMenu(list.isNotEmpty())
+    private fun observeAllNotes() = viewLifecycleOwner.lifecycleScope.launch {
+        viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewModel.allNotes.collect { list ->
+                noteAdapter.submitList(list)
+                binding.noNotes.visibility = if (list.isEmpty()) View.VISIBLE else View.GONE
+                setHasOptionsMenu(list.isNotEmpty())
+            }
+        }
     }
+
 
     private fun toast(message: String) =
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
@@ -186,7 +196,7 @@ class MainFragment : Fragment() {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(getString(R.string.choose_view))
             .setNeutralButton(resources.getString(R.string.cancel)) { _, _ -> }
-            .setPositiveButton(resources.getString(R.string.save)) { dialog, which ->
+            .setPositiveButton(resources.getString(R.string.save)) { dialog, _ ->
                     writeDatastore((dialog as AlertDialog).listView.checkedItemPosition)
                     toast(getString(R.string.view_saved))
             }

@@ -1,8 +1,6 @@
 package com.mhss.app.mynotes.ui.viewmodels
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.mhss.app.mynotes.database.Note
 import com.mhss.app.mynotes.database.NoteRepository
@@ -13,9 +11,9 @@ import javax.inject.Inject
 @HiltViewModel
 class NoteViewModel @Inject constructor(private val repository: NoteRepository) : ViewModel() {
 
-    val allNotes: LiveData<List<Note>> = repository.allNotes.asLiveData()
-    val allFavoriteNotes: LiveData<List<Note>> = repository.allFavoriteNotes.asLiveData()
-    val allDeletedNotes: LiveData<List<Note>> = repository.allDeletedNotes.asLiveData()
+    val allNotes = repository.allNotes
+    val allFavoriteNotes = repository.allFavoriteNotes
+    val allDeletedNotes = repository.allDeletedNotes
 
     private var _isNoteFavorite: Boolean? = null
     val isNoteFavorite

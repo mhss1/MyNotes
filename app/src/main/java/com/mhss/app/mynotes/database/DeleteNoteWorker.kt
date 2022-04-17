@@ -11,7 +11,7 @@ import dagger.assisted.AssistedInject
 class DeleteNoteWorker @AssistedInject constructor(
     @Assisted context: Context,
     @Assisted workerParams: WorkerParameters,
-    private val notesRepository: NoteRepository
+    private val notesRepository: NoteRepositoryImpl
 ) : CoroutineWorker(context, workerParams) {
 
     override suspend fun doWork(): Result {

@@ -7,6 +7,9 @@ import androidx.lifecycle.asLiveData
 import kotlinx.coroutines.flow.map
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,6 +21,7 @@ import com.mhss.app.mynotes.databinding.FragmentTrashBinding
 import com.mhss.app.mynotes.ui.recyclerview.NoteRecAdapter
 import com.mhss.app.mynotes.ui.viewmodels.NoteViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class TrashFragment : Fragment(R.layout.fragment_trash) {
@@ -42,11 +46,16 @@ class TrashFragment : Fragment(R.layout.fragment_trash) {
                 else LinearLayoutManager(requireContext())
         }
 
-        viewModel.allDeletedNotes.observe(viewLifecycleOwner, { list ->
-            binding.noTrashTv.visibility = if(list.isEmpty()) View.VISIBLE else View.GONE
-            adapter.submitList(list)
-            emptyMenuItem.isVisible = list.isNotEmpty()
-        })
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.allDeletedNotes.collect { list ->
+                    binding.noTrashTv.visibility = if(list.isEmpty()) View.VISIBLE else View.GONE
+                    adapter.submitList(list)
+                    emptyMenuItem.isVisible = list.isNotEmpty()
+                }
+            }
+        }
+
         postponeEnterTransition()
         binding.trashRec.viewTreeObserver.addOnPreDrawListener {
             startPostponedEnterTransition()
